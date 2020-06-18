@@ -1,4 +1,4 @@
-export interface IState {
+export interface IStateData {
   checkTimeEt: string;
   commercialScore: number;
   dataQualityGrade: string;
