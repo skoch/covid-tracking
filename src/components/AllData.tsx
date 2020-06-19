@@ -1,14 +1,17 @@
-import { VictoryAxis, VictoryLine, VictoryChart, VictoryTheme } from 'victory';
 import axios from 'axios';
 import moment from 'moment';
+import { find } from 'lodash-es';
 import styled from 'styled-components';
-import React, { memo, useState, useEffect } from 'react';
-
 import { useParams } from 'react-router-dom';
+import React, { memo, useState, useEffect } from 'react';
+import { VictoryAxis, VictoryLine, VictoryChart } from 'victory';
+
+import formatNumber, { statesData } from '../utils/misc';
 
 const Root = styled.div`
   display: flex;
   flex-direction: column;
+  background-color: #f9f9f9;
   /* width: 700px; */
 `;
 
@@ -20,7 +23,8 @@ const Charts = styled.div`
 
 const ChartWrapper = styled.div`
   margin: 5px;
-  border: 1px solid tomato;
+  border: 1px solid #ff4f00;
+  background-color: white;
 `;
 
 interface DataPoint {
@@ -52,12 +56,6 @@ const pointsDeux: DataPoint[] = [
   { point: 'totalTestsViral', label: 'Total Tests Viral' },
 ];
 
-const formatNumber = (num: number) => {
-  return Math.floor(num)
-    .toString()
-    .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-};
-
 // const getStyles = () => ({
 //   parent: {
 //     background: '#ccdee8',
@@ -69,10 +67,18 @@ const formatNumber = (num: number) => {
 // });
 
 const AllData = () => {
-  const { state } = useParams();
+  const { slug } = useParams();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any[] | undefined>(undefined);
 
+  const state: string | undefined = find(statesData, [
+    'slug',
+    slug,
+  ])?.code.toLowerCase();
+
+  const stateFullName: string | undefined = find(statesData, ['slug', slug])
+    ?.state;
+  console.log('state', state);
   useEffect(() => {
     const getData = async () => {
       try {
@@ -104,19 +110,19 @@ const AllData = () => {
 
   return (
     <Root>
-      <h1>{state.toUpperCase()}</h1>
+      <h1>{stateFullName}</h1>
       <Charts>
         {pointsDeux.map(({ point, label }) => (
-          <ChartWrapper>
+          <ChartWrapper key={label}>
             <h2>{label}</h2>
             <VictoryChart
               padding={{ top: 50, left: 75, right: 50, bottom: 50 }}
-              theme={VictoryTheme.material}
+              // theme={VictoryTheme.material}
               width={500}
-              height={250}
+              height={300}
             >
               <VictoryLine
-                style={{ data: { stroke: 'tomato' } }}
+                style={{ data: { stroke: '#FF4F00' } }}
                 data={datedData}
                 x="date"
                 y={point}

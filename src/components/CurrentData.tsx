@@ -5,6 +5,7 @@ import React, { memo, useState, useEffect } from 'react';
 
 import { useParams } from 'react-router-dom';
 import { IStateData } from '../types';
+import formatNumber from '../utils/misc';
 
 const Root = styled.div`
   display: flex;
@@ -13,14 +14,15 @@ const Root = styled.div`
 
 const DataPoint = styled.div`
   display: flex;
+  margin: 5px 0;
 `;
 
-const Label = styled.h4`
+const Label = styled.h3`
   margin: 0;
   margin-right: 10px;
 `;
 
-const Value = styled.h4`
+const Value = styled.h3`
   margin: 0;
   /* display: flex; */
 `;
@@ -89,7 +91,9 @@ const CurrentData = () => {
         return (
           <DataPoint key={label}>
             <Label>{`${label}:`}</Label>
-            <Value>{data[point as keyof IStateData]}</Value>
+            <Value>
+              {formatNumber(Number(data[point as keyof IStateData]))}
+            </Value>
           </DataPoint>
         );
       })}
