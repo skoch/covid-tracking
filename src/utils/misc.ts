@@ -287,4 +287,33 @@ export const statesData = [
   },
 ];
 
+export interface DataPoint {
+  point: string;
+  label: string;
+}
+
+export const dataPoints: DataPoint[] = [
+  { point: 'death', label: 'Death' },
+  { point: 'deathIncrease', label: 'Death Increase' },
+  { point: 'hospitalized', label: 'Hospitalized' },
+  { point: 'hospitalizedCumulative', label: 'Hospitalized Cumulative' },
+  { point: 'hospitalizedCurrently', label: 'Hospitalized Currently' },
+  { point: 'hospitalizedIncrease', label: 'Hospitalized Increase' },
+  { point: 'negative', label: 'Negative' },
+  { point: 'negativeIncrease', label: 'Negative Increase' },
+  { point: 'negativeScore', label: 'Negative Score' },
+  { point: 'onVentilatorCumulative', label: 'On Ventilator Cumulative' },
+  { point: 'onVentilatorCurrently', label: 'On Ventilator Currently' },
+  { point: 'positive', label: 'Positive' },
+  { point: 'positiveCasesViral', label: 'Positive Cases Viral' },
+  { point: 'positiveIncrease', label: 'Positive Increase' },
+  { point: 'positiveScore', label: 'Positive Score' },
+  { point: 'positiveTestsViral', label: 'Positive Tests Viral' },
+  { point: 'recovered', label: 'Recovered' },
+  { point: 'total', label: 'Total' },
+  { point: 'totalTestResults', label: 'Total Test Results' },
+  { point: 'totalTestResultsIncrease', label: 'Total Test Results Increase' },
+  { point: 'totalTestsViral', label: 'Total Tests Viral' },
+];
+
 export default formatNumber;

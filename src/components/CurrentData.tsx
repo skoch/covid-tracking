@@ -1,65 +1,62 @@
 import axios from 'axios';
 import moment from 'moment';
+import { find } from 'lodash-es';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
 import React, { memo, useState, useEffect } from 'react';
 
-import { useParams } from 'react-router-dom';
+import {
+  Header,
+  Header2,
+  Card,
+  PageLabel,
+  fadeIn,
+  StyledLink,
+} from '../styles/Styles';
+
 import { IStateData } from '../types';
-import formatNumber from '../utils/misc';
+
+import formatNumber, { statesData, DataPoint, dataPoints } from '../utils/misc';
 
 const Root = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+
+  ${fadeIn};
 `;
 
-const DataPoint = styled.div`
+const Cards = styled.div`
   display: flex;
-  margin: 5px 0;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  margin-top: 2rem;
 `;
 
 const Label = styled.h3`
   margin: 0;
-  margin-right: 10px;
+  font-size: 1.8rem;
 `;
 
 const Value = styled.h3`
   margin: 0;
-  /* display: flex; */
+  font-family: 'basier';
+  font-size: 1.6rem;
 `;
 
-interface DataPoint {
-  point: string;
-  label: string;
-}
-
-const pointsDeux: DataPoint[] = [
-  { point: 'death', label: 'Death' },
-  { point: 'deathIncrease', label: 'Death Increase' },
-  { point: 'hospitalized', label: 'Hospitalized' },
-  { point: 'hospitalizedCumulative', label: 'Hospitalized Cumulative' },
-  { point: 'hospitalizedCurrently', label: 'Hospitalized Currently' },
-  { point: 'hospitalizedIncrease', label: 'Hospitalized Increase' },
-  { point: 'negative', label: 'Negative' },
-  { point: 'negativeIncrease', label: 'Negative Increase' },
-  { point: 'negativeScore', label: 'Negative Score' },
-  { point: 'onVentilatorCumulative', label: 'On Ventilator Cumulative' },
-  { point: 'onVentilatorCurrently', label: 'On Ventilator Currently' },
-  { point: 'positive', label: 'Positive' },
-  { point: 'positiveCasesViral', label: 'Positive Cases Viral' },
-  { point: 'positiveIncrease', label: 'Positive Increase' },
-  { point: 'positiveScore', label: 'Positive Score' },
-  { point: 'positiveTestsViral', label: 'Positive Tests Viral' },
-  { point: 'recovered', label: 'Recovered' },
-  { point: 'total', label: 'Total' },
-  { point: 'totalTestResults', label: 'Total Test Results' },
-  { point: 'totalTestResultsIncrease', label: 'Total Test Results Increase' },
-  { point: 'totalTestsViral', label: 'Total Tests Viral' },
-];
-
 const CurrentData = () => {
-  const { state } = useParams();
+  const { slug } = useParams();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<IStateData | undefined>(undefined);
+
+  const state: string | undefined = find(statesData, [
+    'slug',
+    slug,
+  ])?.code.toLowerCase();
+
+  const stateFullName: string | undefined = find(statesData, ['slug', slug])
+    ?.state;
 
   useEffect(() => {
     const getData = async () => {
@@ -85,18 +82,22 @@ const CurrentData = () => {
 
   return (
     <Root>
-      <h1>{state.toUpperCase()}</h1>
-      <h2>{day.format('MMM Do, YYYY')}</h2>
-      {pointsDeux.map(({ point, label }: DataPoint) => {
-        return (
-          <DataPoint key={label}>
-            <Label>{`${label}:`}</Label>
-            <Value>
-              {formatNumber(Number(data[point as keyof IStateData]))}
-            </Value>
-          </DataPoint>
-        );
-      })}
+      <StyledLink to={`/all/${slug}`}>View Charts</StyledLink>
+      <PageLabel>Current Data</PageLabel>
+      <Header>{stateFullName}</Header>
+      <Header2>{day.format('MMM Do, YYYY')}</Header2>
+      <Cards>
+        {dataPoints.map(({ point, label }: DataPoint) => {
+          return (
+            <Card key={label}>
+              <Label>{label}</Label>
+              <Value>
+                {formatNumber(Number(data[point as keyof IStateData]))}
+              </Value>
+            </Card>
+          );
+        })}
+      </Cards>
     </Root>
   );
 };

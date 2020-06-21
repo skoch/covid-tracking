@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './App.css';
+// import './App.css';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import AllData from './components/AllData';
@@ -15,7 +15,7 @@ const App: React.FC = () => {
         <Switch>
           <Route exact path="/:state" component={StateChart} />
           <Route exact path="/all/:slug" component={AllData} />
-          <Route exact path="/current/:state" component={CurrentData} />
+          <Route exact path="/current/:slug" component={CurrentData} />
           <Route exact path="/" component={StateList} />
         </Switch>
       </BrowserRouter>

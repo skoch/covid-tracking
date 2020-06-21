@@ -6,55 +6,36 @@ import { useParams } from 'react-router-dom';
 import React, { memo, useState, useEffect } from 'react';
 import { VictoryAxis, VictoryLine, VictoryChart } from 'victory';
 
-import formatNumber, { statesData } from '../utils/misc';
+import formatNumber, { statesData, dataPoints, DataPoint } from '../utils/misc';
+import { Header, Header2, PageLabel, StyledLink } from '../styles/Styles';
 
 const Root = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: #f9f9f9;
-  /* width: 700px; */
+  align-items: center;
 `;
 
 const Charts = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+
+  margin-top: 4rem;
 `;
 
 const ChartWrapper = styled.div`
-  margin: 5px;
-  border: 1px solid #ff4f00;
-  background-color: white;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 1rem;
+  padding-top: 2rem;
+  /* border: 1px solid #ff4f00; */
+  background-color: #fff;
+  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    0 100px 80px rgba(0, 0, 0, 0.12);
 `;
-
-interface DataPoint {
-  point: string;
-  label: string;
-}
-
-const pointsDeux: DataPoint[] = [
-  { point: 'death', label: 'Death' },
-  { point: 'deathIncrease', label: 'Death Increase' },
-  { point: 'hospitalized', label: 'Hospitalized' },
-  { point: 'hospitalizedCumulative', label: 'Hospitalized Cumulative' },
-  { point: 'hospitalizedCurrently', label: 'Hospitalized Currently' },
-  { point: 'hospitalizedIncrease', label: 'Hospitalized Increase' },
-  { point: 'negative', label: 'Negative' },
-  { point: 'negativeIncrease', label: 'Negative Increase' },
-  { point: 'negativeScore', label: 'Negative Score' },
-  { point: 'onVentilatorCumulative', label: 'On Ventilator Cumulative' },
-  { point: 'onVentilatorCurrently', label: 'On Ventilator Currently' },
-  { point: 'positive', label: 'Positive' },
-  { point: 'positiveCasesViral', label: 'Positive Cases Viral' },
-  { point: 'positiveIncrease', label: 'Positive Increase' },
-  { point: 'positiveScore', label: 'Positive Score' },
-  { point: 'positiveTestsViral', label: 'Positive Tests Viral' },
-  { point: 'recovered', label: 'Recovered' },
-  { point: 'total', label: 'Total' },
-  { point: 'totalTestResults', label: 'Total Test Results' },
-  { point: 'totalTestResultsIncrease', label: 'Total Test Results Increase' },
-  { point: 'totalTestsViral', label: 'Total Tests Viral' },
-];
 
 // const getStyles = () => ({
 //   parent: {
@@ -78,7 +59,7 @@ const AllData = () => {
 
   const stateFullName: string | undefined = find(statesData, ['slug', slug])
     ?.state;
-  console.log('state', state);
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -110,11 +91,13 @@ const AllData = () => {
 
   return (
     <Root>
-      <h1>{stateFullName}</h1>
+      <StyledLink to={`/current/${slug}`}>View Current Data</StyledLink>
+      <PageLabel>All Data</PageLabel>
+      <Header>{stateFullName}</Header>
       <Charts>
-        {pointsDeux.map(({ point, label }) => (
+        {dataPoints.map(({ point, label }: DataPoint) => (
           <ChartWrapper key={label}>
-            <h2>{label}</h2>
+            <Header2>{label}</Header2>
             <VictoryChart
               padding={{ top: 50, left: 75, right: 50, bottom: 50 }}
               // theme={VictoryTheme.material}
